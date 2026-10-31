@@ -1,0 +1,35 @@
+# Phase 3 verification ACCEPTANCE tolerances - PRE-REGISTERED before the first verification run and
+# not changed afterwards (sha256 recorded in every report).
+# The final Phase 2 parameter file fixes the solver tolerances (rtol 1e-8, atol_scaled 1e-10), the FD
+# step (1e-5 relative), the U root tolerance (0.01 W/(m2 K)) and the T0 boundary resolution (0.05 K),
+# but contains no acceptance tolerances for V1-V13; they are derived here from the Phase 2 rtol.
+basis_rtol: 1.0e-8
+solution_rel: 1.0e-6          # 100 x rtol: accumulated global error allowed in solution-level comparisons
+X_abs: 1.0e-6                 # conversion (O(1)): absolute
+T_abs_K: 6.25e-4              # temperature: solution_rel x T_c (625 K)
+P_rel: 1.0e-6                 # pressure: relative to P_ref
+Q_rel: 1.0e-6                 # cooling duty: relative to Qrho c_p T_c
+z_rel_L: 1.0e-6               # locations: relative to L
+invariant_rel: 1.0e-7         # 10 x rtol: linear invariants carried by the integrator (V2; V4 auxiliary state)
+quadrature_rel: 1.0e-6        # independent Gauss-Legendre quadrature of the dense output (V3 heated identity; V4)
+tight_rtol: 1.0e-12           # REVISION 1: was 1.0e-10; production rtol tightened 1e-8 -> 1e-10, and tight runs must stay 100x tighter
+fd_step_rel_phase2: 1.0e-5    # Phase 2 numerics.fd_check_rel_step
+fd_steps_rel: [1.0e-3, 1.0e-4, 1.0e-5, 1.0e-6, 1.0e-7, 1.0e-8]   # REVISION 2: extended (was down to 1e-6)
+fd_rel: 1.0e-5                # V10: |forward - FD|/|FD| at the Phase 2 step
+fd_stability_rel: 1.0e-5      # V10: FD(h) and FD(h/10) must agree to this at the Phase 2 step
+fd_solver_rtol: 1.0e-12       # verification-only reference solves (FD, V9 reference); atol_scaled = rtol/100
+Ucrit_xtol: 0.01              # Phase 2 numerics.root_tolerance_U [W/(m2 K)]
+Ucrit_xtol_V12: 0.001         # tighter U root inside V12 so that the T0 comparison is not limited by U
+T0_xtol: 0.005                # 1/10 of the Phase 2 boundary resolution [K] (V9 onset, V12 T0 roots)
+T0_boundary_resolution: 0.05  # Phase 2 numerics.boundary_resolution_T0 [K]; V12 acceptance
+shoot_residual: 1.0e-7        # |P(L)/P_ref - 1| at the Phase 2 rtol (= 10 x rtol)
+guard_z_rel_L: 1.0e-6         # V8: pressure-guard event location vs analytic
+V9_code_rel: 1.0e-6           # Phase 2 V9: reproduce the published code profiles to 1e-6 relative
+V9_onset_halfwidth_K: 2.5     # V9: |T0_crit - 631 K| <= half the 5 K feed spacing of the published code
+V13_scan_points: 41
+V13_Pi_values: [0.20, 0.70]
+# REVISION 1 (after the first run): only tight_rtol changed (tightened). No acceptance value was changed.
+# Original sha256 650bf97cd2cb96fadbf8ee270d064ad4cd6c0bc6c7f127c6dc5c56e4a715fc7e.
+# REVISION 2 (after V10 diagnosis): V10 compares at the largest numerically STABLE FD step (FD(h) vs FD(h/10) <=
+# fd_stability_rel) instead of the fixed Phase 2 step, which is not stable for runaway-front sensitivities
+# (S ~ 3e3). fd_rel and fd_stability_rel are unchanged; the step list was extended downward (a tightening).

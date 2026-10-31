@@ -1,0 +1,361 @@
+# =====================================================================================
+#  PBR runaway project - parameter basis v0.2 (Phase 2 final gate). SI units.
+#  Single source of truth. Allowed statuses ONLY: VERIFIED | LITERATURE | PROPERTY |
+#  PROJECT-DEFINED. No recalled values: every v0.1 value that could not be sourced
+#  (lnA 19.837 in atm units, rho_B, d_p, eps_B, L = 3 m, d_t = 25.4 mm, U = 82.7 kcal,
+#  c_p = 0.237 kcal, N_tubes, T_limit, X_target) has been REMOVED.
+# =====================================================================================
+meta:
+  project: >-
+    Parametric sensitivity and runaway boundaries of a wall-cooled, non-isothermal
+    packed-bed reactor with Ergun pressure drop
+  base_system: >-
+    o-xylene -> phthalic anhydride, single lumped pseudo-first-order reaction, 1-D
+    pseudo-homogeneous plug-flow tube with molten-salt cooling. Dataset = Rawlings &
+    Ekerdt Example 6.5 exactly as implemented in the authors' published code (adapted
+    from van Welsenaere & Froment 1970), cross-checked against the peer-reviewed
+    reproduction ZB2020.
+  version: "0.2 - Phase 2 final gate"
+  date: "2026-09-21"
+  status_legend:
+    VERIFIED: >-
+      confirmed in an accessed peer-reviewed full-text reproduction of the benchmark
+      (or the primary source) AND identical in the adopted dataset
+    LITERATURE: taken from a fully documented, accessed source (full text or published code), cited exactly
+    PROPERTY: physical constant, unit definition or standard composition
+    PROJECT-DEFINED: modelling choice for this project with an explicit engineering rationale
+  critical: [k_m, T_m, E_over_R, dH_rxn, nu_O2, y_x0, M_wf, y_O2_0, P_ref, T0, Tc, Qrho, R_tube, L, cp, U]
+
+references:
+  RE_CODE:
+    kind: code
+    accessed: code
+    text: >-
+      Rawlings, J.B. & Ekerdt, J.G., Chemical Reactor Analysis and Design Fundamentals,
+      2nd ed., Nob Hill Publishing. Companion code main.py for Figs 6.35-6.36 (converted
+      from xyleneT.m), https://sites.engineering.ucsb.edu/~jbraw/chemreacfun/fig-html/ch6/fig-6-35.html
+  RE_SLIDES:
+    kind: textbook
+    accessed: full_text
+    text: >-
+      Rawlings & Ekerdt, Chapter 6 lecture slides (Nob Hill, 2026), Example 6.5, Table 6.5,
+      slides 115-121, https://sites.engineering.ucsb.edu/~jbraw/chemreacfun/ch6/slides-enbal.pdf.
+      Table 6.5 prints km = 1922.6 s^-1 and dH_R = -1.361e3 kJ/kmol, contradicting the code
+      that generated the published figures; not used.
+  ZB2020:
+    kind: peer_reviewed
+    accessed: full_text
+    text: >-
+      Zuluaga-Botero, S., Dobrosz-Gomez, I. & Gomez-Garcia, M.-A. (2020) Parametric sensitivity
+      analysis for the industrial case of o-xylene oxidation to phthalic anhydride in a packed
+      bed catalytic reactor. Catalysts 10(6), 626. doi:10.3390/catal10060626 (Tables 2-4,
+      Eqs 1-21, Sections 5-6)
+  CV2024:
+    kind: peer_reviewed
+    accessed: partial
+    text: >-
+      Carrasco-Venegas, L.A. et al. (2024) ChemEngineering 8(2), 35,
+      doi:10.3390/chemengineering8020035 (model equations 1-20 read; data table not retrieved)
+  VWF1970:
+    kind: primary
+    accessed: "no"
+    text: >-
+      van Welsenaere, R.J. & Froment, G.F. (1970) Parametric sensitivity and runaway in fixed
+      bed catalytic reactors. Chem. Eng. Sci. 25, 1503-1516 (original benchmark, not accessed;
+      optional cross-check only)
+  EEA:
+    kind: guidebook
+    accessed: excerpt
+    text: >-
+      EMEP/CORINAIR Emission Inventory Guidebook, activity 040519 (Phthalic anhydride):
+      multitubular reactor operated at 380-400 C and ambient pressure
+  US4397768:
+    kind: patent
+    accessed: excerpt
+    text: >-
+      US 4,397,768 A: ~3 m x 25 mm tubes; 4 Nm3/h air per tube gives a pressure drop of about
+      2 m water gauge over a 2.8 m ring-catalyst bed; salt bath usually 375-385 C
+  US7557223:
+    kind: patent
+    accessed: excerpt
+    text: "US 7,557,223 (claim): gauge pressure at the reactor entrance 0.35-0.55 bar; hot spots may damage the catalyst"
+  US4119645:
+    kind: patent
+    accessed: excerpt
+    text: "US 4,119,645 A: long tubes give considerable pressure drop, requiring compression of the feed air"
+  US9765046:
+    kind: patent
+    accessed: excerpt
+    text: "US 9,765,046: 25 mm x 4.0 m tube; 30-100 g o-xylene/Nm3 air; salt bath 345 C"
+  US10710054:
+    kind: patent
+    accessed: excerpt
+    text: "US 10,710,054: 25 mm x 350 cm tube; 30-100 g o-xylene/Nm3 air"
+  US5225574:
+    kind: patent
+    accessed: excerpt
+    text: "US 5,225,574: molten salt 350-420 C (prior art); 320-380 C (claimed process)"
+  MO2012:
+    kind: peer_reviewed
+    accessed: abstract
+    text: Montebelli et al. (2012) Ind. Eng. Chem. Res., doi:10.1021/ie2021653 - observed hot spot ~440 C (observation only)
+  CODATA:
+    kind: standard
+    accessed: full_text
+    text: CODATA 2018 molar gas constant; IUPAC atomic weights; definition of the normal cubic metre (273.15 K, 101.325 kPa)
+
+parameters:
+  # -------------------------------------------------------------- kinetics
+  k_m:
+    value: 2.0822
+    unit: 1/s
+    original: {value: 2.0822, unit: 1/sec, source: RE_CODE}
+    status: LITERATURE
+    sources: [RE_CODE]
+    note: "Volumetric pseudo-first-order constant at T_m: r = k_m exp[-(E/R)(1/T - 1/T_m)] c_x (RE_CODE km)."
+  T_m:
+    value: 625.0
+    unit: K
+    status: LITERATURE
+    sources: [RE_CODE]
+    note: Reference temperature of k_m (RE_CODE Tm).
+  E_over_R:
+    value: 13636.0
+    unit: K
+    status: VERIFIED
+    sources: [ZB2020, RE_CODE]
+    note: "ZB2020 Table 3 (van Welsenaere & Froment model, a = 13636 K) and RE_CODE (E = 13636 K) agree."
+  dH_rxn:
+    value: -1.284e+6
+    unit: J/mol
+    original: {value: -1.284e+6, unit: kJ/kmol, source: RE_CODE}
+    cross_check: {value: -306707.0, unit: kcal/kmol, source: ZB2020}
+    status: VERIFIED
+    sources: [RE_CODE, ZB2020]
+    note: "Effective (lumped) heat of the single benchmark reaction; RE_CODE and ZB2020 Table 3 agree within 0.01%."
+  nu_O2:
+    value: 3.0
+    unit: "-"
+    status: LITERATURE
+    sources: [RE_SLIDES]
+    note: "C8H10 + 3 O2 -> C8H4O3 + 3 H2O as written in RE_SLIDES Example 6.5; atom balance checked in C2; total moles unchanged."
+  # -------------------------------------------------------------- feed
+  y_x0:
+    value: 0.019
+    unit: "-"
+    status: LITERATURE
+    sources: [RE_CODE]
+    range: [0.0063, 0.0207]
+    range_sources: [US9765046, US10710054]
+    note: "RE_CODE yxfeed = 0.019. Range = 30-100 g o-xylene per Nm3 air (patents), converted in C2."
+  M_wf:
+    value: 0.0303866
+    unit: kg/mol
+    status: LITERATURE
+    sources: [RE_CODE]
+    note: "RE_CODE Mwf = 0.98*(0.79*28 + 0.21*32) + 0.02*106.17 kg/kmol (re-derived in C2)."
+  y_O2_0:
+    value: 0.2058
+    unit: "-"
+    status: LITERATURE
+    sources: [RE_CODE]
+    note: "Implied by the RE_CODE feed (0.98 x 0.21); lumped into k_m at P_ref; used for the P-scaling and O2 checks."
+  P_ref:
+    value: 101000.0
+    unit: Pa
+    original: {value: 101.0, unit: kN/m^2, source: RE_CODE}
+    status: LITERATURE
+    sources: [RE_CODE, ZB2020]
+    range_sources: [EEA]
+    note: "RE_CODE Pf; reference pressure of k_m; outlet pressure in the pressure-drop extension (ambient discharge)."
+  # -------------------------------------------------------------- operating conditions
+  T0:
+    value: 625.0
+    unit: K
+    status: VERIFIED
+    sources: [ZB2020, RE_CODE]
+    range: [600.0, 680.0]
+    range_sources: [EEA, US5225574, US4397768]
+    note: "Base feed temperature of both reproductions; range spans the documented 320-400 C operating window."
+  Tc:
+    value: 625.0
+    unit: K
+    status: VERIFIED
+    sources: [ZB2020, RE_CODE]
+    range: [618.0, 658.0]
+    range_sources: [US9765046, US4397768]
+    note: "Salt temperature Ta = 625 K (RE_CODE) = TC (ZB2020 constant-cooling case); range = documented salt baths 345-385 C (M8)."
+  Qrho:
+    value: 0.0026371
+    unit: kg/s
+    status: LITERATURE
+    sources: [RE_CODE]
+    note: "Mass flow per tube (RE_CODE); mass flux 5.37 kg/(m2 s)."
+  # -------------------------------------------------------------- geometry
+  R_tube:
+    value: 0.0125
+    unit: m
+    original: {value: 0.0125, unit: m, source: RE_CODE}
+    cross_check: {value: 0.0125, unit: m, source: "ZB2020 Dt/2"}
+    status: VERIFIED
+    sources: [RE_CODE, ZB2020]
+    range_sources: [US9765046, US10710054]
+    note: "RE_CODE R_tube = 1.25e-2 m; ZB2020 Dt = 0.025 m; industrial tubes are 25 mm (patents)."
+  L:
+    value: 1.5
+    unit: m
+    status: LITERATURE
+    sources: [RE_CODE]
+    note: "RE_CODE l = 1.5 m (ZB2020: 2 m; industrial 3-4 m); kept for integrity with k_m, U and Qrho."
+  # -------------------------------------------------------------- thermal
+  cp:
+    value: 992.0
+    unit: J/(kg K)
+    original: {value: 0.992, unit: kJ/(kg K), source: RE_CODE}
+    status: LITERATURE
+    sources: [RE_CODE]
+    range: [992.0, 1045.9]
+    range_sources: [RE_CODE, ZB2020]
+    note: "RE_CODE Cp; ZB2020 uses 0.2498 kcal/(kg K) = 1045.9 J/(kg K); both documented values spanned in M8."
+  U:
+    value: 373.0
+    unit: W/(m^2 K)
+    original: {value: 0.373, unit: kJ/(m^2 s K), source: RE_CODE}
+    status: LITERATURE
+    sources: [RE_CODE]
+    range: [0.0, 750.0]
+    note: "RE_CODE U. Study range PROJECT-DEFINED: 0 (adiabatic limit) to ~2x base; values above 373 are hypothetical cooling capacity."
+  # -------------------------------------------------------------- pressure-drop extension (M3)
+  Pi_max:
+    value: 0.70
+    unit: "-"
+    status: PROJECT-DEFINED
+    sources: [US4397768, US7557223]
+    note: >-
+      Upper end of the Ergun-number study range [0, Pi_max] with the outlet at P_ref. Chosen to
+      reproduce the documented industrial pressures: Pi = 0.21 gives the ~2 m water-gauge bed
+      pressure drop (US4397768), Pi = 0.41-0.70 the 0.35-0.55 bar gauge reactor-entrance pressure
+      (US7557223). Pi = 0 is the benchmark (no pressure drop).
+  Pi_inlet_max:
+    value: 0.30
+    unit: "-"
+    status: PROJECT-DEFINED
+    sources: []
+    note: >-
+      Inlet-specified comparison (P(0) = P_ref) only for Pi <= 0.30, where isothermal P_out/P0 >= 0.63
+      and pressure stays well above zero under hot-spot heating; the 1-atm-inlet case is hydraulically
+      infeasible at the top of the documented range.
+  P_min_frac:
+    value: 0.05
+    unit: "-"
+    status: PROJECT-DEFINED
+    sources: []
+    note: >-
+      Numerical guard: any integration reaching P < 0.05 P_ref is stopped and discarded as invalid;
+      it is never interpreted as thermal runaway.
+  # -------------------------------------------------------------- constants
+  R_gas:
+    value: 8.314462618
+    unit: J/(mol K)
+    status: PROPERTY
+    sources: [CODATA]
+    note: "RE_CODE uses 8.314; the 0.005% difference is within the V9 tolerance."
+  M_oX:
+    value: 0.10617
+    unit: kg/mol
+    status: PROPERTY
+    sources: [CODATA, RE_CODE]
+    note: o-xylene C8H10 (RE_CODE uses 106.17).
+  Vm_normal:
+    value: 0.022414
+    unit: m^3/mol
+    status: PROPERTY
+    sources: [CODATA]
+    note: Ideal-gas molar volume at 273.15 K and 101.325 kPa; used only to convert g/Nm3 loadings.
+
+source_audit:   # raw values from the accessed sources, used by the checker to audit them
+  re_code_Mwf_formula: {x_air: 0.98, y_N2: 0.79, y_O2: 0.21, M_N2: 28.0, M_O2: 32.0, x_oX: 0.02, M_oX: 106.17}
+  loading_range_g_per_Nm3: [30.0, 100.0]
+  re_documented_runaway_feed_T_K: 631.0      # RE_SLIDES slide 121: runaway for feed T above about 631 K
+  re_table_6_5_printed: {km_per_s: 1922.6, dH_kJ_per_kmol: -1361.0}
+  zb2020_table3_literal: {P_O2_kPa: 21.07, lnA: 19.837, rho_b: 1300.0, rho_L: 0.5203, D_t: 0.025}
+  zb2020_differences:            # [RE_CODE, ZB2020 Table 2]
+    L_m: [1.5, 2.0]
+    U_W_per_m2K: [373.0, 96.18]
+    cp_J_per_kgK: [992.0, 1045.9]
+    mass_flux_kg_per_m2s: [5.37, 1.293]
+    feed: ["y 0.019", "p_A0 0.9322 kPa"]
+  US4397768_bed_dP_m_water: 2.0
+  m_water_Pa: 9806.65                        # conventional metre of water (unit definition)
+  US7557223_inlet_gauge_bar: [0.35, 0.55]
+  standard_atmosphere_Pa: 101325.0           # unit definition, for gauge -> absolute
+
+criteria:
+  hot_spot:
+    definition: "T_hs = max over 0 <= z <= L of T(z); z_hs its location; dT_hs = T_hs - Tc"
+    sources: [RE_SLIDES]
+  runaway_boundary:
+    definition: >-
+      S(z) = dT(z)/dT0 with Tc held fixed, from forward sensitivity equations, S(0) = 1.
+      Critical when the interior maximum of S over 0 < z <= L equals 1 (a unique interior point with
+      S = 1). max S < 1: inlet perturbations attenuated (safe side); max S > 1: amplified (runaway side).
+      If dS/dz(0) > 0 the case is on the runaway side (project clarification of the edge case).
+    sources: [ZB2020]
+    note: sensitivity-based (parametric-sensitivity) runaway boundary - NOT a dynamic stability criterion
+  Ucrit:
+    definition: >-
+      For fixed T0 and coolant configuration, U_crit = the U at which the runaway_boundary condition
+      holds; U > U_crit lies on the safe side. Found by bracketed root finding on max S - 1.
+    sources: [ZB2020]
+  light_off:
+    definition: "Adiabatic runs only (U = 0): z_50 where X = 0.5, and X(L). Descriptive, not a criterion."
+    sources: []
+  engineering_T_limit:
+    definition: >-
+      none - no catalyst or material temperature limit was found in the accessed sources; ~440 C
+      (MO2012) is an observed operating hot spot, recorded as context only
+    sources: [MO2012, US7557223]
+  dynamic_stability:
+    definition: >-
+      not analysed. The steady initial-value model has a unique solution for given inputs; the
+      outlet-pressure (two-point) case is checked numerically for uniqueness (V13).
+    sources: [RE_SLIDES, ZB2020]
+  morbidelli_varma:
+    definition: not used - primary source (Morbidelli & Varma 1988) not accessed; optional cross-check if supplied
+    sources: []
+
+model:
+  reaction: "C8H10 + 3 O2 -> C8H4O3 + 3 H2O (single lumped reaction, effective dH)"
+  kinetic_law: >-
+    r = k_m exp[-(E/R)(1/T - 1/T_m)] (P/P_ref) c_x,  c_x = y_x P/(R T),  y_x = y_x0 (1 - X)   [mol/(m3 s)]
+  kinetic_law_note: >-
+    Identical to RE_CODE at P = P_ref. P/P_ref is the first-order O2 partial-pressure dependence
+    (p_O2 = y_O2 P, y_O2 held at its inlet value) of the partial-pressure law k p_O2 p_x documented in
+    ZB2020 (k1 contains P_O2) and CV2024 (r = k p_j p_O2). One law for every module.
+  rate_basis: per unit bed volume (catalyst lumped into k_m); no catalyst-mass coordinate
+  coordinate: axial position z (m); dimensionless zeta = z/L
+  oxygen_depletion: false
+  pressure_drop:
+    baseline: false
+    M3: true
+    form: "Ergun, inertia-dominated: dp/dzeta = -Pi (T/Tc)/p, p = P/P_ref"
+    spec_primary: outlet
+    comparisons: ["constant P = P0 (same inlet pressure, no decline)", "inlet P(0) = P_ref for Pi <= Pi_inlet_max"]
+  coolant_configurations:
+    physical: "Tc fixed at 625 K (RE_CODE Ta; ZB2020 TC; inside documented 618-658 K salt range); T0 varied"
+    normalized: "Tc = T0 (classical convention); comparison only, not claimed industrially representative"
+
+numerics:
+  # PHASE 3 REVISION (numerics only; physical parameters unchanged). Evidence: verification V5/V6/V7/V9
+  # showed global-error amplification of ~900 x rtol near runaway (rtol 1e-8 -> 9e-6 relative at
+  # T0 = 630 K), violating the Phase 2 requirement of 1e-6 relative accuracy; rtol 1e-10 gives 1.7e-7.
+  # Previous values: solver_primary Radau, solver_crosscheck [BDF, LSODA], rtol 1e-8, atol_scaled 1e-10.
+  # BDF made primary per the Phase 3 instruction (Radau and LSODA remain independent cross-checks).
+  solver_primary: BDF
+  solver_crosscheck: [Radau, LSODA]
+  rtol: 1.0e-10
+  atol_scaled: 1.0e-12
+  sensitivity_method: forward_sensitivity_equations
+  fd_check_rel_step: 1.0e-5
+  root_tolerance_U: 0.01
+  boundary_resolution_T0: 0.05
