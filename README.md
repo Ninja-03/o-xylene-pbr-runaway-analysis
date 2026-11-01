@@ -84,6 +84,8 @@ A `CITATION.cff` file is provided for this software release. Once a versioned Gi
 
 ## Rights and reuse
 
-Copyright © 2026 Aryan Saxena. All rights reserved. No open-source license is granted in this release. Public visibility of this repository does not by itself grant permission to reuse, modify, redistribute, or incorporate the code into another project. A separate license may be added by the author after review.
+Copyright © 2026 Aryan Saxena. All rights reserved.
+
+No open-source licence is granted for this software. Users may view, use, display, and fork this public repository through GitHub as permitted by GitHub's Terms of Service. No additional licence is granted for independent reuse, modification, redistribution, or incorporation of the software into other projects. Any permissions beyond those provided through GitHub's platform functionality require separate permission from the copyright holder.
 
 Third-party publications are cited in the parameter file and source code but are not redistributed in this repository.
