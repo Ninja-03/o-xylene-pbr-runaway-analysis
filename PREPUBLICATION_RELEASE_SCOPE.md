@@ -1,5 +1,7 @@
 # Pre-publication release scope
 
-This ZIP is a software-only release candidate. It intentionally does not contain the manuscript, supplementary information, Scopus exports, screening records, source-paper PDFs, audit reports, or derived result datasets.
+This repository contains a software-only pre-publication release. It intentionally does not contain the manuscript, supplementary information, Scopus exports, screening records, source-paper PDFs, audit reports, or derived result datasets.
 
-Before making the repository public, the author should confirm that all code in this tree is owned by or licensed to Aryan Saxena and review the final Git diff. The repository currently has no open-source license.
+Before each new tagged release, the author should review the final Git diff and confirm that all included code, parameters, and supporting materials are suitable for public disclosure.
+
+The repository does not grant an open-source licence. Refer to `RIGHTS_AND_LICENSING.md` for the applicable rights and reuse conditions.
