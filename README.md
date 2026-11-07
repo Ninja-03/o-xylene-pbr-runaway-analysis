@@ -1,54 +1,41 @@
-# o-Xylene packed-bed reactor runaway analysis
+# o-Xylene Packed-Bed Reactor Runaway Analysis
 
-**Author: Aryan Saxena**  
-School of Chemical Engineering, Vellore Institute of Technology, Vellore, India
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23852766.svg)](https://doi.org/10.5281/zenodo.23852766)
 
-This repository contains the model implementation, frozen parameter file, numerical verification code, and extension-study scripts associated with the research project:
+**Author:** Aryan Saxena
+**Affiliation:** School of Chemical Engineering, Vellore Institute of Technology, Vellore, India
 
-> Separating pressure-level and axial pressure-decline effects on a sensitivity-based parametric runaway boundary in a model o-xylene packed-bed reactor.
+This repository contains a one-dimensional pseudo-homogeneous packed-bed reactor model for studying thermal behaviour during o-xylene oxidation. It includes the model, frozen base-case parameters, numerical verification routines and extension-study scripts.
 
-## Scope of this public software release
+## Contents
 
-Included:
-- the one-dimensional pseudo-homogeneous packed-bed reactor implementation (`src/pbr/`);
-- the frozen base parameter file (`params/base_case.yaml`);
-- numerical verification code and tolerances (`verification/`);
-- pressure-decomposition and oxygen-model extension code (`phase4/`);
-- extension-study scripts for generalized pressure order, a second parameter dataset, and multi-step reaction networks (`extension_study/`).
+- `src/pbr/` — reactor model and supporting calculations.
+- `params/` — frozen base-case parameters.
+- `verification/` — numerical tests, reference calculations and tolerances.
+- `phase4/` — pressure-decomposition and oxygen-model studies.
+- `extension_study/` — additional pressure-order, coolant, parameter-dataset and reaction-network studies.
+- `checks/` and `runs/` — parameter checks and base-case run scripts.
 
-Not included in this pre-publication software release:
-- the manuscript, supplementary information, or unpublished manuscript drafts;
-- Scopus search exports, forward-citation CSVs, screening worksheets, abstracts, or literature-screening reports;
-- downloaded publisher PDFs or other copyrighted source papers;
-- internal review notes, intermediate document-generation scripts, failed-attempt logs, or private working files;
-- manuscript tables/figures and the full derived result datasets. The included scripts generate numerical outputs locally when run.
-
-These exclusions are deliberate. The complete internal research archive is maintained separately and is not this public release package.
-
-## Model scope
-
-The base implementation models o-xylene oxidation in a one-dimensional pseudo-homogeneous plug-flow packed-bed reactor with wall cooling. The pressure-drop parameterisation and the sensitivity-based parametric runaway boundary are documented in the source code and verification suite. The criterion is a steady-state parametric-sensitivity criterion; it is not a dynamic-stability, saddle-node, or bifurcation criterion.
-
-The `phase4/` directory contains the controlled pressure-decomposition and oxygen-model study implementation. `extension_study/` contains separate implementations and scripts for pressure-order, co-current-coolant, second-dataset, and multi-step-network calculations.
+The manuscript, supplementary information, literature-screening records, Scopus exports, publisher PDFs and full derived result datasets are not included in this software release.
 
 ## Requirements
 
 - Python 3.12
-- Dependencies pinned in `requirements.txt`
+- Packages listed in `requirements.txt`
 
-Create an environment and install dependencies:
+Create an environment and install the dependencies:
 
 ```bash
 python -m venv .venv
-# Windows PowerShell:
+# Windows PowerShell
 .venv\Scripts\Activate.ps1
-# macOS/Linux:
+# macOS/Linux
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Run the base verification workflow
+## Run the base verification
 
 From the repository root:
 
@@ -56,9 +43,7 @@ From the repository root:
 bash run_all.sh
 ```
 
-The script runs the parameter plausibility check, the A1/V1–V13 verification suite, and the base-case sanity run. Generated outputs are written under `results/` and are not included in this pre-publication release.
-
-On Windows, run the commands in `run_all.sh` individually in PowerShell if Bash is unavailable:
+On Windows without Bash, run these commands in PowerShell:
 
 ```powershell
 python checks/phase2_plausibility.py params/base_case.yaml
@@ -67,25 +52,18 @@ python verification/make_report.py
 python runs/base_case_sanity.py
 ```
 
-## Extension-study scripts
+The base verification sequence performs the parameter plausibility check, the A1/V1–V13 verification suite, report generation, and the base-case sanity run. Generated outputs are written locally under `results/` and are not included in this release.
 
-See [`extension_study/README.md`](extension_study/README.md) for the recommended run order and model-specific commands. The extension scripts write JSON, log, and figure outputs locally; those generated outputs are excluded from this pre-publication release.
+For the additional studies, see [`extension_study/README.md`](extension_study/README.md) for the run order and commands. Scripts write generated files locally; those outputs are not bundled with this release.
 
-## Reproducibility
+## Model scope
 
-- The base parameter file and verification tolerances are frozen inputs.
-- Verification outputs contain code and parameter hashes when generated.
-- Do not edit the frozen parameter file without updating the corresponding verification records and explaining the change.
-- Results from the extension scripts should be regenerated from the included scripts rather than treated as bundled result data.
+The model represents a steady-state, one-dimensional pseudo-homogeneous plug-flow packed-bed reactor with wall cooling. The runaway boundary is based on a steady-state parametric-sensitivity criterion. It is not a dynamic-stability, saddle-node or bifurcation criterion. The model has not been experimentally validated and should not be used as a plant-safety assessment.
 
 ## Citation
 
-A `CITATION.cff` file is provided for this software release. Once a versioned GitHub release has been archived by Zenodo, cite the version-specific Zenodo DOI in research outputs.
+Please cite version 1.0.0 using its [Zenodo version DOI](https://doi.org/10.5281/zenodo.23852766). The [concept DOI](https://doi.org/10.5281/zenodo.23852765) resolves to the record covering all versions.
 
-## Rights and reuse
+## Licence
 
-Copyright © 2026 Aryan Saxena. All rights reserved.
-
-No open-source licence is granted for this software. Users may view, use, display, and fork this public repository through GitHub as permitted by GitHub's Terms of Service. No additional licence is granted for independent reuse, modification, redistribution, or incorporation of the software into other projects. Any permissions beyond those provided through GitHub's platform functionality require separate permission from the copyright holder.
-
-Third-party publications are cited in the parameter file and source code but are not redistributed in this repository. Third-party materials remain subject to their respective rights and licensing terms.
+Copyright © 2026 Aryan Saxena. All rights reserved. No open-source licence is granted. Third-party publications and materials remain subject to their respective rights and licensing terms.

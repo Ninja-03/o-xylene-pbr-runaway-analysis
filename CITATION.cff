@@ -1,10 +1,15 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite the versioned software release. Add the Zenodo DOI after the GitHub release has been archived."
+message: "If you use this software, please cite version 1.0.0 using its Zenodo DOI."
 title: "o-Xylene Packed-Bed Reactor Runaway Analysis"
 authors:
   - family-names: "Saxena"
     given-names: "Aryan"
 version: "1.0.0"
 date-released: "2026-11-01"
+doi: "10.5281/zenodo.23852766"
 repository-code: "https://github.com/Ninja-03/o-xylene-pbr-runaway-analysis"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23852765"
+    description: "Zenodo concept DOI covering all versions of this software."
 type: software
